@@ -1,82 +1,61 @@
 package net.jaguides.springbootbackend.controller;
-
-import net.jaguides.springbootbackend.service.EventService;
 import net.jaguides.springbootbackend.exception.ResourceNotFoundException;
 import net.jaguides.springbootbackend.model.Event;
 import net.jaguides.springbootbackend.repository.EventRepository;
+import net.jaguides.springbootbackend.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-@CrossOrigin ("*")
+@CrossOrigin(origins ="*")
+//@CrossOrigin ("*")
 @RestController
 @RequestMapping("/api/v1/events")
+
 public class EventController {
 
+
     @Autowired
-    private EventRepository eventRepository;
-
-    @GetMapping
-    public List<Event> getAllEvents(){
-        return eventRepository.findAll();
+    private EventService eventService;
 
 
-        }
-
-//build create  event rest api
-    @PostMapping
-    public Event createEvent(@RequestBody Event event)
-    {
-        return eventRepository.save(event);
+    @GetMapping("/getAll")
+    public List<Event> getAllEvents() {
+        return eventService.getAllEvents();
     }
 
-    @PostMapping("/save")
-    public ResponseEntity<Void> saveEvents(@RequestBody List<Event> events){
 
-        EventService.saveEvents(events);
-        System.out.println("Data saved");
-        return new ResponseEntity<>(HttpStatus.OK);
+    //build create  event rest api
+    @PostMapping("/addEvent")
+    public Event addEvent(@RequestBody Event event) {
+        return eventService.addEvent(event);
+    }
 
+    // Add more than 1 event
+    @PostMapping("/addEvents")
+    public List<Event> addAllEvents(@RequestBody List<Event> events) {
+        return eventService.addAllEvents(events);
     }
 
 
     // buil get event by id rest api
 
-    @GetMapping({"id"})
-    public ResponseEntity<Event> getEventById(@PathVariable long id){
-        Event event = eventRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Event not exist with id:"+id));
-        return ResponseEntity.ok(event);
-    }
-    // build update event REST API
-    @PutMapping("{id}")
-    public ResponseEntity<Event> updateEvent(@PathVariable long id,@RequestBody Event eventDetails) {
-        Event updateEvent= eventRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Event does not exist with id: " + id));
-
-        updateEvent.setEventname(eventDetails.getEventname());
-        updateEvent.setEventlocation(eventDetails.getEventlocation());
-        updateEvent.setEmailId(eventDetails.getEmailId());
-
-        eventRepository.save(updateEvent);
-
-        return ResponseEntity.ok(updateEvent);
+    @GetMapping("/getEventByID/{id}")
+    public Event getEventById(@PathVariable long id) {
+        return eventService.getEventByID(id);
     }
 
-    // build delete event  REST API
-    @DeleteMapping("{id}")
-    public ResponseEntity<HttpStatus> deleteEvent(@PathVariable long id){
-
-     Event event = eventRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Event not exist with id: " +id));
-
-        eventRepository.delete(event);
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-
+    // Update event
+    @PutMapping("/updateEvent/{id}")
+    public Event updateEvent(@RequestBody Event event,@PathVariable long id) {
+        return eventService.updateEvent(event,id);
     }
 
-
+    // Delete event
+    @DeleteMapping("/deleteEventById/{id}")
+    public boolean deleteEventByID(@PathVariable long id) {
+        return eventService.deleteEventByID(id);
+    }
 }
-
