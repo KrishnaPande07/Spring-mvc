@@ -1,0 +1,29 @@
+
+
+<h2> Event List </h2>
+
+
+<table class="table table-striped">
+  <thead>
+    <tr> 
+      <th>Event Name</th>
+      <th>EventLocation</th>
+      <th>Date</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor = "let event of events">
+
+      <td> {{ event.eventname }}</td>
+       <td>{{ event.eventlocation }}</td>
+       <td>{{ event.date }}</td>
+       <td>
+<button (click)="updateEvent(event.id)" class="btn btn-info">Update</button>
+<button (click) = "deleteEvent(event.id)" class="btn btn-danger" style="margin-left: 10px">Delete</button>
+</td>
+    </tr>
+    
+  </tbody>
+</table>
+
