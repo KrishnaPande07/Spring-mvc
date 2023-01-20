@@ -1,0 +1,25 @@
+<div class="col-md-6 offset-md-3">
+<h3>Create Event</h3>
+
+<form (ngSubmit)="onSubmit()">
+
+<div class="form-group">
+  <label>Event Name</label>
+  <input type="text" class="form-control" id="eventName" [(ngModel)]="event.eventname" name="eventName">
+</div>
+
+<div class="form-group">
+  <label>Event Location</label>
+  <input type="text" class="form-control" id="eventLocation" [(ngModel)]="event.eventlocation" name="eventLocation`">
+</div>
+
+<div class="form-group">
+  <label>Date</label>
+  <input type="text" class="form-control" id="Date" [(ngModel)]="event.date" name="eventDate">
+</div>
+
+<button class= "btn btn-success" type="submit">Submit</button>
+
+
+</form>
+</div>

@@ -1,0 +1,37 @@
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Event } from '../event';
+import { EventService } from '../event.service';
+
+@Component({
+  selector: 'app-create-event',
+  templateUrl: './create-event.component.html',
+  styleUrls: ['./create-event.component.css']
+})
+export class CreateEventComponent implements OnInit {
+
+  event: Event = new Event();
+  
+  constructor(private eventService:EventService,private router:Router) { }
+
+  ngOnInit():void {
+  }
+
+  saveEvent(){
+    this.eventService.createEvent(this.event).subscribe(data =>{
+      console.log(data);
+      this.goToEventList();
+    },
+    error => console.log(error));
+  }
+
+  goToEventList(){
+
+    this.router.navigate(['/events']);
+  }
+ onSubmit(){
+    console.log(this.event);
+    this.saveEvent();
+  
+ }
+}
